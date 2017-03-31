@@ -1,8 +1,6 @@
 /* index.js */
 
 // This will also contain much of the "view" part of an MVC architecture.
-
-import {CANVAS_ID,INPUT_ID} from './constants';
 import {
     clear,
     drawCircles,
@@ -22,11 +20,13 @@ import {
     moveCursor
 } from './controller';
 
+export const INPUT_ID = "nCircles";
+
 // -----------------------------------------------------------------------------
 // Helper
 
 function getCanvas(){
-    return document.getElementById(CANVAS_ID);
+    return document.getElementById("myCanvas");
 }
 
 function getCursorPosition(canvas, event) {
