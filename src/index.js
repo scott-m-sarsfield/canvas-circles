@@ -3,7 +3,11 @@
 // This will also contain much of the "view" part of an MVC architecture.
 
 import {CANVAS_ID,INPUT_ID} from './constants';
-import {drawCircles} from './render';
+import {
+    clear,
+    drawCircles,
+    drawBezierCurveFromAToB
+} from './render';
 
 import {
     getState,
@@ -45,7 +49,22 @@ function update(){
     var circle = state.circles[state.activeCircle];
     coordinateElm.innerHTML = circle ? ("(" + circle.cx + "," + circle.cy + ")") : "";
 
+
+    clear();
     drawCircles( state.circles );
+
+    // also draw bezier curve between first two circles.
+    if(state.numberOfCircles >= 2){
+        drawBezierCurveFromAToB({
+            x:state.circles[0].cx,
+            y:state.circles[0].cy
+        },{
+            x:state.circles[1].cx,
+            y:state.circles[1].cy
+        },
+            state.circles[0].r
+        );
+    }
 
 }
 
