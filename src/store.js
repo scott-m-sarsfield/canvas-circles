@@ -68,6 +68,7 @@ export const saveCursorCoordinate = function saveCursorCoordinate(coordinate){
 
 export const moveCircle = function moveCircle(circleId,deltaX,deltaY){
     var circle = state.circles[circleId];
+    if(!circle) return;
     circle.cx += deltaX;
     circle.cy += deltaY;
     emitChange();

@@ -1,6 +1,3 @@
-
-import {CANVAS_ID} from './constants';
-
 function drawCircle(ctx,{cx=50,cy=50,r=50,color="#f00"}={}){
     ctx.fillStyle=color;
 
@@ -59,24 +56,12 @@ function drawCircle(ctx,{cx=50,cy=50,r=50,color="#f00"}={}){
 
 }
 
-function getContext(){
-
-    var canvas = document.getElementById(CANVAS_ID);
-    return canvas.getContext('2d');
-}
-
-function clear(){
-    // get context
-    var canvas = document.getElementById(CANVAS_ID);
-    var context = canvas.getContext('2d');
-
+function clear(context){
     // clear canvas
-    context.clearRect(0,0,canvas.width,canvas.height);
+    context.clearRect(0,0,context.canvas.width,context.canvas.height);
 }
 
-function drawCircles(circles){
-    var context = getContext();
-
+function drawCircles(context,circles){
     // draw circles
     var i;
     for(i=0;i<circles.length;i++){
@@ -85,9 +70,7 @@ function drawCircles(circles){
 }
 
 
-function drawBezierCurveFromAToB(pointA,pointB,radius){
-    var context = getContext();
-
+function drawBezierCurveFromAToB(context, pointA,pointB,radius){
     // leftmost point is "start", other is "end"
     let start = pointA,
         end = pointB;

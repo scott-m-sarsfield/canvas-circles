@@ -39,31 +39,76 @@ function getCursorPosition(canvas, event) {
 // -----------------------------------------------------------------------------
 // Update / Render
 
+var movingACircle = false;
+
 function update(){
     const state = getState();
 
+    // Number of Circles input
     var inputElm = document.getElementById(INPUT_ID);
     inputElm.defaultValue = state.numberOfCircles;
 
+    // Coordinate Display
     var coordinateElm = document.getElementById("circle-coordinates");
     var circle = state.circles[state.activeCircle];
     coordinateElm.innerHTML = circle ? ("(" + circle.cx + "," + circle.cy + ")") : "";
 
+    // CANVAS
 
-    clear();
-    drawCircles( state.circles );
+    var foreground = document.getElementById('myCanvas').getContext('2d');
+    var background = document.getElementById('myBackgroundCanvas').getContext('2d');
 
-    // also draw bezier curve between first two circles.
-    if(state.numberOfCircles >= 2){
-        drawBezierCurveFromAToB({
-            x:state.circles[0].cx,
-            y:state.circles[0].cy
-        },{
-            x:state.circles[1].cx,
-            y:state.circles[1].cy
-        },
+    function drawTheBezierCurve(context){
+        drawBezierCurveFromAToB(
+            context,
+            {
+                x:state.circles[0].cx,
+                y:state.circles[0].cy
+            },{
+                x:state.circles[1].cx,
+                y:state.circles[1].cy
+            },
             state.circles[0].r
         );
+    }
+
+    // I will be moving a circle.  Render non-relevant
+    // items in the background.
+    if(!movingACircle && state.activeCircle !== null){
+
+        clear(background);
+
+        if(state.activeCircle < 2){
+            drawCircles(background,state.circles.slice(2));
+        }else{
+            drawCircles(background,state.circles.slice(0,state.activeCircle).concat(state.circles.slice(state.activeCircle+1)));
+            drawTheBezierCurve(background);
+        }
+
+        movingACircle = true;
+    }
+
+    if(state.activeCircle === null){
+        clear(background);
+        movingACircle = false;
+    }
+
+    if(movingACircle){
+        clear(foreground);
+        if(state.activeCircle < 2){
+            drawCircles(foreground,state.circles.slice(0,2));
+            drawTheBezierCurve(foreground);
+        }else{
+            drawCircles(foreground,[state.circles[state.activeCircle]]);
+        }
+    }else{
+
+        clear(foreground);
+        drawCircles(foreground, state.circles );
+
+        if(state.numberOfCircles >= 2){
+            drawTheBezierCurve(foreground);
+        }
     }
 
 }
@@ -103,6 +148,10 @@ window.onload = ()=>{
     var canvas = getCanvas();
     canvas.height = canvas.parentNode.offsetHeight;
     canvas.width = canvas.parentNode.offsetWidth;
+    var bgCanvas = document.getElementById('myBackgroundCanvas');
+    bgCanvas.height = canvas.height;
+    bgCanvas.width = canvas.width;
+
     setCanvasDimensions(canvas.height,canvas.width);
 
     // add event listeners
