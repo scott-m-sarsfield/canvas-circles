@@ -86,9 +86,9 @@ function update(){
         }
 
         movingACircle = true;
-    }
 
-    if(state.activeCircle === null){
+    // Once I'm done moving the circle, clear the background.
+    }else if(movingACircle && state.activeCircle === null){
         clear(background);
         movingACircle = false;
     }
