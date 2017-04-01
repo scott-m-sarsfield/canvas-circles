@@ -58,6 +58,7 @@ export const setNumberOfCircles = function setNumberOfCircles(numberOfCircles){
 };
 
 export const setActiveCircle = function setActiveCircle(circleId){
+    if(circleId === undefined) circleId = null;
     state.activeCircle = circleId;
     emitChange();
 };

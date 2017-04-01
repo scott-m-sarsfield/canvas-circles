@@ -59,6 +59,7 @@ function update(){
     var background = document.getElementById('myBackgroundCanvas').getContext('2d');
 
     function drawTheBezierCurve(context){
+        if(state.numberOfCircles < 2) return; // can't draw the curve...
         drawBezierCurveFromAToB(
             context,
             {
